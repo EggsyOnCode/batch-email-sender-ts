@@ -10,13 +10,10 @@ export interface Email {
   email: string;
 }
 
-const emails: Email[] = [
-  { id: 0, to: "", subject: "", email: "" },
-  { id: 1, to: "", subject: "", email: "" },
-];
+const emails: Email[] = [{ id: 0, to: "", subject: "", email: "" }];
 
 const Dashboard: React.FC = () => {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(1);
   const { logout, user } = useAuth0(undefined);
   const [state, dispatch] = useReducer(reducer, { emails });
 
@@ -24,14 +21,24 @@ const Dashboard: React.FC = () => {
   function handleCount(action: string) {
     if (action === "+") {
       setCount((prevState) => prevState + 1);
+      dispatch({ type: "add", payload: { id: count } });
+      console.log(count);
+      
     } else if (action === "-") {
       setCount((prevState) => prevState - 1);
     }
   }
+
+  function discardEmail(ID: number) {
+    handleCount("-");
+    dispatch({ type: "discard", payload: { id: ID } });
+  }
+  
   return (
     <div className="min-h-screen w-screen bg-blue-950 flex-col items-center justify-center">
-      <section className="navbar h-[45px] bg-black w-screen flex justify-around">
-        <h1 className="text-[18px] text-white pt-3">{`Welcome ${user}`}</h1>
+      <section className="navbar h-[45px] bg-black w-screen flex justify-center">
+        <img src={user?.picture} alt={user?.name} className="mr-6" />
+        <h1 className="text-[18px] text-white pt-3 mr-28">{`Welcome ${user?.name}`}</h1>
         <button
           className="bg-yellow-500 p-2 m-1 rounded-lg text-black text-center"
           onClick={() => logout()}
@@ -49,10 +56,10 @@ const Dashboard: React.FC = () => {
           <h1>New Email</h1>
         </div>
       </section>
-      <section className="pt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <section className="pt-10 grid grid-cols-1 col-start-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {state.emails.map((obj, index) => {
           return (
-            <div className=" m-3 flex flex-col justify-center items-center bg-yellow-600 from-slate-500 to-yellow-400 rounded-lg p-4">
+            <div className="m-3 flex flex-col justify-center items-center bg-yellow-600 from-slate-500 to-yellow-400 rounded-lg p-4">
               <input
                 type="text"
                 placeholder="To:"
@@ -68,8 +75,18 @@ const Dashboard: React.FC = () => {
                 className="bg-white text-black h-[200px] w-[360px] md:w-[400px] lg:w-[450px] rounded-md"
               />
               <div className="flex flex-row mt-2">
-                <button className="mr-40 bg-green-800 rounded-xl p-2">Send</button>
-                <button className="bg-red-700 rounded-xl p-2">Discard</button>
+                <button className="mr-40 bg-green-800 rounded-xl p-2">
+                  Send
+                </button>
+                <button
+                  className="bg-red-700 rounded-xl p-2"
+                  onClick={() => {
+                    console.log(index, obj.id);
+                    discardEmail(index);
+                  }}
+                >
+                  Discard
+                </button>
               </div>
             </div>
           );
