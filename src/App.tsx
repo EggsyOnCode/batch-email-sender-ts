@@ -1,7 +1,7 @@
-import { Routes, Route } from 'react-router-dom'
-import './App.css'
-import Welcome from './components/Welcome'
-
+import { Routes, Route } from "react-router-dom";
+import "./App.css";
+import Welcome from "./components/Welcome";
+import Dashboard from "./components/Dashboard";
 
 function App() {
   return (
@@ -9,11 +9,11 @@ function App() {
       <div>
         <Routes>
           <Route path="/" element={<Welcome />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
-        <Welcome />
       </div>
     </>
   );
 }
 
-export default App
+export default App;

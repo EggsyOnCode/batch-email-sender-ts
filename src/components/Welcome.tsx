@@ -1,6 +1,10 @@
 import React from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Welcome: React.FC = () => {
+  const {loginWithRedirect , logout} = useAuth0(undefined);
+
+
   return (
     <div className="bg-blue-950 flex justify-center items-center fixed inset-0">
       <div className="bg-white font-adobe flex-col justify-center items-center p-5">
@@ -17,11 +21,11 @@ const Welcome: React.FC = () => {
             Submit your email to get started
           </h1>
           <div className="flex justify-center items-center mt-6">
-            <button className="p-3 mr-10 rounded-lg text-[20px] bg-green-500 w-[110px]">
+            <button className="p-3 mr-10 rounded-lg text-[20px] bg-green-500 w-[110px]" onClick={()=>loginWithRedirect()}>
               Login
             </button>
-            <button className="p-3  rounded-lg text-[20px] bg-green-500 w-[110px]">
-              Sign Up!
+            <button className="p-3  rounded-lg text-[20px] bg-green-500 w-[110px]" onClick={()=>logout()}>
+              Log Out!
             </button>
           </div>
         </section>
