@@ -2,6 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import React, { useState, useReducer } from "react";
 import { reducer } from "../hooks/useReducer";
 import AddIcon from "@mui/icons-material/Add";
+import { useNavigate } from "react-router-dom";
 
 export interface Email {
   id: number;
@@ -15,6 +16,8 @@ const emails: Email[] = [{ id: 0, to: "", subject: "", email: "" }];
 const Dashboard: React.FC = () => {
   const [count, setCount] = useState(1);
   const { logout, user } = useAuth0(undefined);
+  const navigate = useNavigate();
+  const goToConfig = () => navigate("/config", { replace: true });
   const [state, dispatch] = useReducer(reducer, { emails });
 
   // state handlers
@@ -35,8 +38,8 @@ const Dashboard: React.FC = () => {
   }
   
   return (
-    <div className="min-h-screen w-screen bg-blue-950 flex-col items-center justify-center">
-      <section className="navbar h-[45px] bg-black w-screen flex justify-center">
+    <div className="min-h-screen w-screen bg-black flex-col items-center justify-center">
+      <section className="navbar h-[45px] bg-blue-950 w-screen flex justify-center">
         <img src={user?.picture} alt={user?.name} className="mr-6" />
         <h1 className="text-[18px] text-white pt-3 mr-28">{`Welcome ${user?.name}`}</h1>
         <button
@@ -48,6 +51,9 @@ const Dashboard: React.FC = () => {
       </section>
 
       <section className="counter pt-10 flex justify-center items-center hover:cursor-pointer">
+        <h1 className="text-[14px] text-white mr-6 hover:text-orange-300" onClick={()=>{goToConfig()}}>
+          <i>Learn How to Setup Email Sending feature?</i>
+        </h1>
         <div
           className="bg-yellow-400 w-fit p-2 rounded-2xl"
           onClick={() => handleCount("+")}
@@ -56,10 +62,10 @@ const Dashboard: React.FC = () => {
           <h1>New Email</h1>
         </div>
       </section>
-      <section className="pt-10 grid grid-cols-1 col-start-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <section className="pt-10 grid grid-cols-1 col-start-2 md:grid-cols-2 lg:grid-cols-3 gap-4 text-white">
         {state.emails.map((obj, index) => {
           return (
-            <div className="m-3 flex flex-col justify-center items-center bg-yellow-600 from-slate-500 to-yellow-400 rounded-lg p-4">
+            <div className="m-3 flex flex-col justify-center items-center bg-[#758C73] rounded-lg p-4">
               <input
                 type="text"
                 placeholder="To:"
@@ -72,7 +78,7 @@ const Dashboard: React.FC = () => {
               />
               <input
                 placeholder="Message:"
-                className="bg-white text-black h-[200px] w-[360px] md:w-[400px] lg:w-[450px] rounded-md"
+                className="bg-white text-black h-[200px] w-[340px] md:w-[400px] lg:w-[450px] rounded-md"
               />
               <div className="flex flex-row mt-2">
                 <button className="mr-40 bg-green-800 rounded-xl p-2">
@@ -92,6 +98,7 @@ const Dashboard: React.FC = () => {
           );
         })}
       </section>
+      
     </div>
   );
 };
